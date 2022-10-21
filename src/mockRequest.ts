@@ -1,16 +1,19 @@
-export const mockRequest: () => Promise<any> = async () => {
+import { Detail } from "./components/BugCounter";
+
+export const mockRequest: () => Promise<{ data: Detail[] }> = async () => {
+    console.log('mock')
     return new Promise((resolve, reject): any => {
         setTimeout(() => {
             resolve({
                 data: [
                     {
-                        name: "ArthurDon",
-                        // 取1-5随机数
-                        bugs: Math.floor(Math.random() * 5) + 1,
+                        id: "wxtangjiahao",
+                        bugs: 4,
+
                     },
                     {
-                        name: "Arthur",
-                        bugs: Math.floor(Math.random() * 5) + 1,
+                        id: 'wxArthurdon',
+                        bugs: 2
                     },
                 ]
             });

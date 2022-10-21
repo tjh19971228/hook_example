@@ -1,86 +1,81 @@
 import React from "react";
 import { BugDetail } from "./BugDetail";
 
-export type Bug = {
-  name: string;
+export type Detail = {
+  id: string;
   bugs: number;
-  fakeBugs?: number;
+};
+type BugCounterProps = {
+  [key: string]: any;
 };
 
-type BugCounterState = {
-  bugs: number;
-  bugList: Bug[];
-  getBugReport: boolean;
-};
-
-export class BugCounter extends React.Component<{}, BugCounterState> {
-  // 构造器写法
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      bugs: 6,
-      bugList: [
-        {
-          name: "ArthurDon",
-          bugs: 1,
-        },
-      ],
-      getBugReport: false,
-    };
-  }
-
-  reportNewBug() {
+export class BugCounter extends React.Component<BugCounterProps> {
+  state = {
+    bugs: 10,
+    bugList: [
+      {
+        id: "wxtangjiahao",
+        bugs: 6,
+      },
+    ],
+    isRenderTheNewestList: true,
+  };
+  handleAddBugs = () => {
     this.setState({
       bugs: this.state.bugs + 1,
-    });
-  }
-
-  // 获取最新的bugList
-  changeBugList = (bugList: Bug[]) => {
-    this.setState({
-      bugList,
-    });
-  };
-
-  // 获取最新的bugs
-  changeBugs = (bugs: number) => {
-    this.setState({
-      bugs,
+      bugList: this.state.bugList.map((item) => {
+        if (item.id === "wxtangjiahao") {
+          return {
+            ...item,
+            bugs: item.bugs + 1,
+          };
+        }
+        return item;
+      }),
+      isRenderTheNewestList: false,
     });
   };
-
-  changeGetBugReport = () => {
-    this.setState({
-      getBugReport: !this.state.getBugReport,
-    });
-  };
-
-  // 非构造器写法
-
-  // state = {
-  //     bugs: 6
-  // }
-  // reportNewBug = () => {
-  //     this.setState({ bugs: this.state.bugs + 1 });
-  // }
-
   render() {
     return (
       <div>
-        <h1>Bug Tracker</h1>
-        <p>-------------------------总览-----------------------</p>
-        {/* <BugReportView bugs={this.state.bugs} /> */}
-        <h3>总共有{this.state.bugs}个bugs </h3>
-        <p>-------------------------状态-----------------------</p>
-        <p>是否已经接受了bugReport:{this.state.getBugReport ? "是" : "否"}</p>
-        <p>-------------------------详情-----------------------</p>
+        <h2>Bug Tracker</h2>
+        <p
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          ----------------总览----------------
+        </p>
+        <h2>Bugs: {this.state.bugs}</h2>
+        <h3>
+          {this.state.isRenderTheNewestList
+            ? "已经渲染最新的结果辣"
+            : "还没有渲染最新的结果"}
+        </h3>
+        <p
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          ----------------详情----------------
+        </p>
         <BugDetail
-          bugList={this.state.bugList}
           bugs={this.state.bugs}
-          changeBugList={this.changeBugList}
-          changeBugs={this.changeBugs}
-          changeGetBugReport={this.changeGetBugReport}
+          bugsList={this.state.bugList}
+          changeRender={() => {
+            this.setState({
+              isRenderTheNewestList: true,
+            });
+          }}
         />
+        <p
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          ----------------操作----------------
+        </p>
+        <button onClick={this.handleAddBugs}>增加wxtangjiahao的bug数</button>
       </div>
     );
   }
